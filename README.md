@@ -247,3 +247,139 @@ this.setState({ count: this.state.count + 1 });
 ```bash
 this.setState((prevState) => ({ count: prevState.count + 1 }));
 ```
+## 21) What are React refs, and why are they used?
+- Refs provide a way to access DOM elements or React elements directly without re-rendering the component.
+- Use Cases: Managing focus, triggering animations, or integrating third-party libraries.
+#### Example:
+
+```bash
+function App() {
+  const inputRef = React.useRef(null);
+
+  const focusInput = () => {
+    inputRef.current.focus();
+  };
+
+  return (
+    <>
+      <input ref={inputRef} type="text" />
+      <button onClick={focusInput}>Focus Input</button>
+    </>
+  );
+}
+```
+## 22) How does React handle DOM updates efficiently?
+- React uses the Virtual DOM to optimize updates. It compares the current Virtual DOM with the previous one using a process called diffing. Only the changed parts of the real DOM are updated.
+
+#### Example:
+- When updating a list, React will only update the changed list items instead of re-rendering the entire list.
+
+## 23) What are Higher-Order Components (HOCs)?
+- An HOC is a function that takes a component and returns a new component, often used to share logic between components.
+#### Example:
+
+```bash
+function withLogger(WrappedComponent) {
+  return function EnhancedComponent(props) {
+    console.log('Props:', props);
+    return <WrappedComponent {...props} />;
+  };
+}
+
+const ButtonWithLogger = withLogger(Button);
+```
+
+## 24) What are CSS modules in React?
+- CSS Modules allow you to scope CSS locally to a component to avoid naming conflicts.
+#### Example:
+
+```bash
+/* styles.module.css */
+.title {
+  color: green;
+}
+```
+```bash
+import styles from './styles.module.css';
+function App() {
+  return <h1 className={styles.title}>Scoped Style</h1>;
+}
+```
+## 25) What is the difference between componentDidMount and componentWillUnmount?
+- componentDidMount: Runs after the component is mounted. Used for data fetching or subscriptions.
+- componentWillUnmount: Runs before the component is removed. Used for cleanup (e.g., removing event listeners).
+#### Example:
+```bash
+class App extends React.Component {
+  componentDidMount() {
+    console.log('Mounted');
+  }
+  componentWillUnmount() {
+    console.log('Unmounting');
+  }
+  render() {
+    return <h1>Hello</h1>;
+  }
+}
+```
+## 26) Explain the significance of React.StrictMode.
+- StrictMode highlights potential problems in an application by running additional checks and warnings in development mode.
+#### Example:
+
+```bash
+<React.StrictMode>
+  <App />
+</React.StrictMode>
+```
+## 27) How does React handle conditional rendering?
+#### React handles conditional rendering using:
+
+- Ternary operators
+- Logical && operator
+- If-else statements
+#### Example:
+
+```bash
+function App({ isLoggedIn }) {
+  return isLoggedIn ? <h1>Welcome</h1> : <h1>Please Log In</h1>;
+}
+```
+## 28) How do you share data between sibling components?
+- Data can be shared using a common parent component and passing props. Alternatively, you can use state management like Redux or Context API.
+#### Example:
+
+```bash
+function Parent() {
+  const [data, setData] = React.useState('Hello');
+  return (
+    <>
+      <Child1 setData={setData} />
+      <Child2 data={data} />
+    </>
+  );
+}
+```
+## 29) What is a React Portal?
+- React Portals allow rendering components outside the DOM hierarchy of the parent.
+#### Example:
+
+```bash
+ReactDOM.createPortal(
+  <div>Portal Content</div>,
+  document.getElementById('portal-root')
+);
+```
+## 30) Explain lazy loading in React.
+- Lazy loading delays loading components until they’re needed, improving performance.
+#### Example:
+
+```bash
+const LazyComponent = lazy(() => import('./LazyComponent'));
+function App() {
+  return (
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent />
+    </React.Suspense>
+  );
+}
+```
