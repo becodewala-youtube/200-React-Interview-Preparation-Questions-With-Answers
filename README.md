@@ -530,3 +530,231 @@ function Protected({ isLoggedIn }) {
   return isLoggedIn ? <Dashboard /> : <Navigate to="/login" />;
 }
 ```
+## 40) How do you handle redirection in React?
+- Use the Navigate component to redirect users programmatically.
+
+#### Example:
+
+```bash
+import { Navigate } from 'react-router-dom';
+
+function Protected({ isLoggedIn }) {
+  return isLoggedIn ? <Dashboard /> : <Navigate to="/login" />;
+}
+```
+## 41) What are dynamic routes in React Router?
+- Dynamic routes contain variables that match parts of the URL.
+
+#### Example:
+
+```bash
+<Route path="/user/:userId" element={<User />} />;
+```
+- Here, :userId is a dynamic segment.
+
+## 42) How do you add default routes in a React app?
+- Use the index attribute for default nested routes or specify a catch-all fallback route.
+
+#### Example:
+
+```bash
+<Routes>
+  <Route path="/" element={<Layout />}>
+    <Route index element={<Home />} />
+    <Route path="about" element={<About />} />
+  </Route>
+</Routes>
+```
+- Navigating to / renders Home.
+
+## 43) What is the significance of exact routes in React Router?
+- exact ensures the route matches the path precisely, preventing partial matches. It was used in React Router v5 but is no longer needed in v6 due to improved matching logic.
+
+- React Router v5 Example:
+
+```bash
+<Route exact path="/" component={Home} />
+<Route path="/about" component={About} />
+```
+## 44) How do you handle 404 pages in React?
+- Use a catch-all route with a wildcard * path to display a 404 page for unmatched routes.
+
+#### Example:
+
+```
+<Routes>
+  <Route path="/" element={<Home />} />
+  <Route path="/about" element={<About />} />
+  <Route path="*" element={<NotFound />} />
+</Routes>
+```
+- Navigating to a nonexistent route will render the NotFound component.
+
+## 45) What are React hooks, and why were they introduced?
+- React hooks are functions introduced in React 16.8 to allow functional components to use state and lifecycle features, which were previously only available in class components. They make code cleaner, reduce boilerplate, and promote better organization of logic through reusable custom hooks.
+
+#### Why Introduced?
+- Simplify state management in functional components.
+- Encourage sharing logic without complex patterns like higher-order components (HOCs).
+- Eliminate the need for classes.
+#### Example:
+
+```bash
+import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0); // Declare a state variable and its updater function
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+```
+- Here, useState allows us to add state to a functional component, simplifying the implementation.
+## 46) What is the difference between useState and useReducer?
+ |Feature|	useState|	useReducer| | 
+ |------| ----|----------|-
+Purpose|	Manage simple states.|	Manage complex states with logic.
+Syntax|	const [state, setState] = useState();|	const [state, dispatch] = useReducer();
+Usage|	For counters, toggles, etc.	|For forms, app-level states, etc.|
+Example|	Increment a counter.|	Handle complex state changes with actions.
+
+#### Example for useReducer:
+
+```bash
+import React, { useReducer } from 'react';
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'increment': return state + 1;
+    case 'decrement': return state - 1;
+    default: return state;
+  }
+};
+
+function Counter() {
+  const [count, dispatch] = useReducer(reducer, 0);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>Increment</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>Decrement</button>
+    </div>
+  );
+}
+```
+- useReducer is ideal for managing state transitions in larger applications.
+
+## 47) How does the useRef hook work in React?
+- useRef provides a way to persist values or references across renders without triggering re-renders. It’s often used for accessing DOM elements or storing mutable values.
+
+#### Use Cases:
+- Access DOM nodes directly.
+- Store mutable values that do not trigger re-renders.
+#### Example:
+
+```bash
+import React, { useRef } from 'react';
+
+function InputFocus() {
+  const inputRef = useRef(null);
+
+  const handleFocus = () => {
+    inputRef.current.focus(); // Directly access DOM node
+  };
+
+  return (
+    <div>
+      <input ref={inputRef} type="text" />
+      <button onClick={handleFocus}>Focus Input</button>
+    </div>
+  );
+}
+```
+- Here, useRef stores a reference to the input element and provides direct access to it.
+
+## 48) What is the difference between useEffect and useLayoutEffect?
+|Feature |	useEffect|	useLayoutEffect| |
+ |------| ----|----------|-
+When it Runs|	After rendering and painting.|	After rendering but before painting.
+Use Cases|	Data fetching, subscriptions, logging.|	DOM manipulations, measurements, animations.
+Performance Impact|	Less blocking of UI updates.|	Blocks painting until work is done.
+
+#### Example of useLayoutEffect:
+
+```bash
+import React, { useLayoutEffect, useRef } from 'react';
+
+function MeasureComponent() {
+  const divRef = useRef(null);
+
+  useLayoutEffect(() => {
+    console.log(divRef.current.getBoundingClientRect()); // Accurate measurement
+  });
+
+  return <div ref={divRef}>Measure Me</div>;
+}
+```
+## 49) How do you optimize performance in React applications?
+#### Performance optimization ensures a smoother user experience and faster interactions.
+
+#### Strategies:
+- React.memo: Prevents unnecessary re-renders by memoizing components.
+- useCallback and useMemo: Avoids unnecessary re-creation of functions and values.
+- Code Splitting: Dynamically loads only required parts of the app.
+- Virtualization: Renders only visible items in large lists (e.g., react-window).
+- Avoid Reconciliation: Use key attributes and avoid changing component trees unnecessarily.
+#### Example with React.memo:
+
+```bash
+import React from 'react';
+
+const Child = React.memo(({ data }) => {
+  console.log('Child re-rendered');
+  return <p>{data}</p>;
+});
+
+function Parent() {
+  const [count, setCount] = React.useState(0);
+
+  return (
+    <div>
+      <Child data="Static Data" />
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+```
+- Here, Child won’t re-render unless its data prop changes.
+
+## 50) What is React Context API, and how is it used?
+- The Context API allows components to share data without passing props down every level.
+
+#### Use Cases:
+- Global themes.
+- User authentication data.
+- App-wide configuration.
+#### Example:
+
+```bash
+import React, { createContext, useContext } from 'react';
+
+const ThemeContext = createContext('light');
+
+function App() {
+  return (
+    <ThemeContext.Provider value="dark">
+      <Child />
+    </ThemeContext.Provider>
+  );
+}
+
+function Child() {
+  const theme = useContext(ThemeContext);
+  return <p>Current Theme: {theme}</p>;
+}
+````
