@@ -383,3 +383,150 @@ function App() {
   );
 }
 ```
+## 31) What is React.memo, and why is it used?
+- React.memo prevents unnecessary re-renders by memoizing the component unless its props change.
+#### Example:
+
+```bash
+const MemoizedComponent = React.memo(({ count }) => {
+  console.log('Rendered');
+  return <div>{count}</div>;
+});
+```
+## 32) How do you prevent unnecessary re-renders in React?
+- Use React.memo for functional components.
+- Use shouldComponentUpdate or PureComponent in class components.
+- Avoid inline functions/objects as props.
+- Use useMemo or useCallback for optimization.
+#### Example (useCallback):
+```bash
+const handleClick = React.useCallback(() => { console.log('Clicked'); }, []);
+```
+## 32) How do you implement code splitting in React?
+- Code splitting breaks large bundles into smaller chunks using React.lazy and dynamic imports.
+#### Example:
+
+```bash
+const Component = React.lazy(() => import('./Component'));
+```
+## 33) What is the difference between a library and a framework? Is React a library or framework?
+- Library: A collection of tools to help build applications (React).
+- Framework: Provides a complete structure for application development (Angular).
+- React is a library focused on UI.
+## 34) How do you fetch data in React applications?
+- Data can be fetched using fetch, Axios, or third-party libraries. Typically, data fetching is done in useEffect or lifecycle methods.
+#### Example:
+
+```bash
+function App() {
+  const [data, setData] = React.useState([]);
+  React.useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/posts')
+      .then((res) => res.json())
+      .then((data) => setData(data));
+  }, []);
+  return <ul>{data.map((item) => <li key={item.id}>{item.title}</li>)}</ul>;
+}
+```
+## 35)Explain the purpose of the useEffect hook.
+- useEffect manages side effects in functional components, like fetching data, updating the DOM, or subscribing to events. It runs after the component renders or when dependencies change.
+
+#### Example:
+
+```bash
+import { useEffect, useState } from 'react';
+
+function App() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/posts')
+      .then((response) => response.json())
+      .then((data) => setData(data));
+  }, []); // Empty array ensures it runs once after initial render
+
+  return <ul>{data.map((item) => <li key={item.id}>{item.title}</li>)}</ul>;
+}
+```
+## 36)How do you use React Router?
+- React Router allows navigation between different pages in a React app. It provides components like Routes, Route, and Link for routing.
+
+#### Example:
+
+```bash
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+function Home() {
+  return <h1>Home Page</h1>;
+}
+
+function About() {
+  return <h1>About Page</h1>;
+}
+```
+
+## 37) What is the purpose of <BrowserRouter> in React Router?
+- <BrowserRouter> provides the context for managing navigation and history in a React app. It uses the HTML5 history API to keep the UI in sync with the URL.
+
+#### Example:
+- In the example above, <BrowserRouter> wraps the app to enable routing.
+## 38) How do you manage routing for nested components?
+- Use nested <Route> elements within parent routes to define nested routing.
+
+#### Example:
+
+```bash
+<Routes>
+  <Route path="dashboard" element={<Dashboard />}>
+    <Route path="profile" element={<Profile />} />
+    <Route path="settings" element={<Settings />} />
+  </Route>
+</Routes>;
+```
+- Navigating to /dashboard/profile will render Dashboard and Profile.
+
+## 39) What is the purpose of useParams in React Router?
+- useParams retrieves route parameters from the URL.
+
+#### Example:
+
+```bash
+import { useParams } from 'react-router-dom';
+
+function Post() {
+  const { id } = useParams();
+  return <h1>Post ID: {id}</h1>;
+}
+
+// Route definition:
+<Route path="/post/:id" element={<Post />} />;
+```
+- Navigating to /post/123 will display Post ID: 123.
+
+## 40) How do you handle redirection in React?
+- Use the Navigate component to redirect users programmatically.
+
+#### Example:
+
+```bash
+import { Navigate } from 'react-router-dom';
+
+function Protected({ isLoggedIn }) {
+  return isLoggedIn ? <Dashboard /> : <Navigate to="/login" />;
+}
+```
