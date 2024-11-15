@@ -130,3 +130,120 @@ function Child({ onClick }) {
 const items = ['Apple', 'Banana', 'Cherry'];
 items.map((item, index) => <li key={index}>{item}</li>);
 ```
+## 11) How do you handle events in React?
+- Events are handled using camelCase attributes and event handler functions.
+#### Example:
+```bash
+function App() {
+  const handleClick = () => alert('Button Clicked!');
+  return <button onClick={handleClick}>Click Me</button>;
+}
+```
+## 12) What is two-way binding in React?
+- Two-way binding means synchronizing data between the component’s state and the UI. React does not have built-in two-way binding; you implement it manually using onChange and value.
+#### Example:
+```bash
+function App() {
+  const [text, setText] = React.useState('');
+  return <input value={text} onChange={(e) => setText(e.target.value)} />;
+}
+```
+## 13) What are React fragments, and why are they used?
+- Fragments let you group elements without adding extra nodes to the DOM.
+#### Example:
+
+```bash
+<>
+  <h1>Title</h1>
+  <p>Paragraph</p>
+</>
+```
+## 14) Explain controlled vs. uncontrolled components.
+- Controlled components: The value is controlled by React state.
+- Uncontrolled components: The value is controlled by the DOM.
+#### Example (Controlled):
+
+```bash
+function App() {
+  const [value, setValue] = React.useState('');
+  return <input value={value} onChange={(e) => setValue(e.target.value)} />;
+}
+```
+#### Example (Uncontrolled):
+
+```bash
+function App() {
+  const inputRef = React.useRef();
+  return <input ref={inputRef} />;
+}]
+```
+
+## 15) How do you implement forms in React?
+- Forms are implemented using controlled components to track the input values.
+#### Example:
+
+```bash
+function Form() {
+  const [name, setName] = React.useState('');
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert(`Hello, ${name}!`);
+  };
+  return (
+    <form onSubmit={handleSubmit}>
+      <input value={name} onChange={(e) => setName(e.target.value)} />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+## 16) What is defaultProps, and how is it used?
+- defaultProps provides default values for props if none are supplied.
+#### Example:
+
+```bash
+function Greeting({ name }) {
+  return <h1>Hello, {name}</h1>;
+}
+Greeting.defaultProps = { name: 'Guest' };
+````
+## 17) What is propTypes, and why is it used?
+- propTypes validate the types of props a component receives. It’s useful for debugging.
+#### Example:
+
+```bash
+Greeting.propTypes = { name: PropTypes.string.isRequired };
+```
+## 18) Explain the React component lifecycle.
+- Mounting: Component is created (componentDidMount).
+- Updating: Props or state change -(componentDidUpdate).
+- Unmounting: Component is removed (componentWillUnmount).
+#### Example:
+
+```bash
+class App extends React.Component {
+  componentDidMount() {
+    console.log('Mounted');
+  }
+  componentWillUnmount() {
+    console.log('Unmounted');
+  }
+  render() {
+    return <h1>Hello</h1>;
+  }
+}
+```
+## 19) What is setState, and how does it work?
+- setState updates the component’s state and triggers a re-render. It works asynchronously to batch updates.
+#### Example:
+
+```bash
+this.setState({ count: this.state.count + 1 });
+```
+## 20) Why is it important to use an updater function in setState?
+- When multiple state updates happen, the previous state might not be immediately available. The updater function ensures updates are based on the latest state.
+#### Example:
+
+```bash
+this.setState((prevState) => ({ count: prevState.count + 1 }));
+```
