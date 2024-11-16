@@ -926,3 +926,158 @@ const mapDispatchToProps = (dispatch) => ({
   increment: () => dispatch({ type: 'INCREMENT' }),
 });
 ```
+## 61) What are thunks in Redux?
+- A thunk is a middleware function that allows you to write asynchronous logic that interacts with the Redux store. With Redux Thunk, actions can return functions instead of objects.
+
+- Example with Redux Thunk:
+
+```bash
+const fetchData = () => {
+  return async (dispatch) => {
+    dispatch({ type: 'FETCH_START' });
+    const data = await fetch('/api/data').then((res) => res.json());
+    dispatch({ type: 'FETCH_SUCCESS', payload: data });
+  };
+};
+```
+## 62) How do you handle asynchronous actions in Redux?
+- You handle asynchronous actions using middleware like Redux Thunk or Redux Saga. These middleware tools enable actions to perform async operations before dispatching.
+
+#### Example with Thunk:
+
+```bash
+store.dispatch(fetchData());
+```
+
+## 63) How do you implement error boundaries in React?
+- Error boundaries are used to catch JavaScript errors in child components and display a fallback UI instead of crashing the entire app. They catch rendering errors, lifecycle method errors, and errors thrown in constructors.
+
+#### Example Implementation:
+
+```bash
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true }; // Update state so the next render shows fallback UI.
+  }
+
+  componentDidCatch(error, errorInfo) {
+    // Log error details, e.g., to a monitoring service.
+    console.error("Error caught by boundary:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong.</h1>;
+    }
+    return this.props.children;
+  }
+}
+
+// Usage
+<ErrorBoundary>
+  <MyComponent />
+</ErrorBoundary>
+```
+- Error boundaries only work in class components, not in functional components.
+
+## 64) What is React Fiber?
+- React Fiber is React’s reconciliation engine introduced in version 16. It optimizes rendering by dividing the rendering process into small chunks, enabling React to pause, prioritize, and resume work efficiently.
+
+#### Features of Fiber:
+
+- Time-slicing: Improves rendering for high-priority tasks.
+- Concurrency: Manages animations and transitions smoothly.
+## 65) Explain reconciliation in React.
+- Reconciliation is React’s algorithm for efficiently updating the DOM. React creates a Virtual DOM and compares it with the previous state (diffing). Only the differences are updated in the real DOM.
+
+- Example: If a button’s text changes from "Click Me" to "Clicked", React:
+
+- Creates a new Virtual DOM tree.
+- Finds the difference (text change).
+- Updates only the text node instead of re-rendering the entire DOM tree.
+## 66) How does React handle hydration?
+- Hydration happens in server-side rendering (SSR). It’s when React takes over static HTML from the server and attaches event listeners to make it interactive.
+
+#### Example:
+
+```bash
+ReactDOM.hydrate(<App />, document.getElementById('root'));
+```
+- Hydration is efficient because it reuses the server-rendered DOM structure instead of rebuilding it.
+
+## 67) What is server-side rendering (SSR) in React?
+- In SSR, the React app is rendered on the server, and the generated HTML is sent to the client. This improves SEO and initial load performance.
+
+#### Example (Next.js):
+
+```bash
+export async function getServerSideProps() {
+  const data = await fetch('https://api.example.com');
+  return { props: { data } };
+}
+
+export default function Page({ data }) {
+  return <div>{data.message}</div>;
+}
+```
+## 68) What is static site generation (SSG) in React?
+- SSG pre-builds static HTML pages at build time. It’s suitable for content that rarely changes (e.g., blogs).
+
+#### Example (Next.js):
+
+```
+export async function getStaticProps() {
+  const data = await fetch('https://api.example.com');
+  return { props: { data } };
+}
+
+export default function Page({ data }) {
+  return <div>{data.message}</div>;
+}
+```
+## 69) What are React Suspense and Concurrent Mode?
+- Suspense: Allows React to "suspend" rendering until some asynchronous data (like a lazy-loaded component) is ready.
+- Concurrent Mode: Enhances performance by breaking tasks into smaller units and prioritizing them.
+#### Example of Suspense:
+
+```bash
+import React, { Suspense, lazy } from 'react';
+
+const LazyComponent = lazy(() => import('./LazyComponent'));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent />
+    </Suspense>
+  );
+}
+```
+## 70) How do you implement pagination in React?
+- Pagination divides data into pages, allowing users to navigate through them.
+
+#### Example:
+
+```bash
+const itemsPerPage = 5;
+const [currentPage, setCurrentPage] = useState(1);
+const currentItems = data.slice(
+  (currentPage - 1) * itemsPerPage,
+  currentPage * itemsPerPage
+);
+
+return (
+  <div>
+    {currentItems.map(item => (
+      <p key={item.id}>{item.name}</p>
+    ))}
+    <button onClick={() => setCurrentPage(currentPage - 1)}>Previous</button>
+    <button onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
+  </div>
+);
+```
