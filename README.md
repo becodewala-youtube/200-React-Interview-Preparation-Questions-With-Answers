@@ -758,3 +758,171 @@ function Child() {
   return <p>Current Theme: {theme}</p>;
 }
 ````
+## 51) How do you handle global state in React?
+- Global state can be managed using tools like the Context API or Redux.
+
+#### Example with Context API:
+
+```bash
+const GlobalState = createContext();
+
+function App() {
+  const [user, setUser] = useState(null);
+
+  return (
+    <GlobalState.Provider value={{ user, setUser }}>
+      <Child />
+    </GlobalState.Provider>
+  );
+}
+```
+## 52) What is Redux, and why is it used with React?
+- Redux is a state management library that provides a predictable way to manage state across your application. It ensures the state is centralized, immutable, and debug-friendly.
+
+#### Core Concepts:
+- Store: Single source of truth for application state.
+- Action: Describes what to do.
+- Reducer: Pure function defining how state changes in response to actions.
+## 53) What are React.lazy and Suspense used for?
+- React.lazy enables dynamic import of components for code splitting, while Suspense handles the loading state.
+
+#### Example:
+
+```bash
+const LazyComponent = React.lazy(() => import('./LazyComponent'));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent />
+    </Suspense>
+  );
+}
+```
+- This setup dynamically loads LazyComponent and shows a fallback until it's ready.
+
+## 54)What are the core concepts of Redux?
+### Redux follows three core principles:
+
+#### Single Source of Truth:
+- The entire state of the application is stored in one central location, called the store.
+#### Example:
+
+```bash
+const initialState = { counter: 0 };
+const store = createStore(reducer, initialState);
+```
+
+#### State is Read-Only:
+- State can only be changed by dispatching actions, making changes predictable.
+#### Example:
+
+```bash
+store.dispatch({ type: 'INCREMENT' });
+```
+#### Changes are Made with Pure Functions (Reducers):
+- Reducers are pure functions that take the current state and an action, and return the next state.
+#### Example:
+
+```bash
+function reducer(state = { counter: 0 }, action) {
+  switch (action.type) {
+    case 'INCREMENT': return { counter: state.counter + 1 };
+    default: return state;
+  }
+}
+```
+## 55) What is an action in Redux?
+- An action is a plain JavaScript object that describes what happened. It must have a type property that indicates the action's intent.
+
+#### Example:
+
+```bash
+const incrementAction = { type: 'INCREMENT' };
+store.dispatch(incrementAction);
+```
+- Actions can also carry additional data (called payload):
+
+```bash
+const addTodoAction = { type: 'ADD_TODO', payload: 'Learn Redux' };
+```
+## 56) What is a reducer in Redux?
+- A reducer is a pure function that takes the current state and an action, and returns a new state. It specifies how the state should change in response to actions.
+
+#### Example:
+
+```bash
+function counterReducer(state = { count: 0 }, action) {
+  switch (action.type) {
+    case 'INCREMENT': return { count: state.count + 1 };
+    case 'DECREMENT': return { count: state.count - 1 };
+    default: return state;
+  }
+}
+```
+## 57) Explain the role of the Redux store.
+- The store holds the entire application state. It provides methods to:
+
+- Get the current state (store.getState()).
+- Dispatch actions (store.dispatch(action)).
+- Subscribe to state changes (store.subscribe(callback)).
+#### Example:
+
+```bash
+import { createStore } from 'redux';
+
+const store = createStore(counterReducer);
+store.subscribe(() => console.log(store.getState()));
+
+store.dispatch({ type: 'INCREMENT' }); // Logs: { count: 1 }
+```
+## 58) How do you connect Redux with React components?
+- Use the connect function from react-redux to map the Redux state and dispatch to React component props.
+
+#### Example:
+
+```bash
+import { connect } from 'react-redux';
+
+function Counter({ count, increment }) {
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>Increment</button>
+    </div>
+  );
+}
+
+const mapStateToProps = (state) => ({ count: state.count });
+const mapDispatchToProps = (dispatch) => ({
+  increment: () => dispatch({ type: 'INCREMENT' }),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Counter);
+```
+## 59) What is middleware in Redux?
+- Middleware allows you to customize and extend Redux's behavior. It sits between the action dispatch and the reducer, enabling features like logging, asynchronous actions, or API calls.
+
+#### Example with Redux Thunk:
+
+```bash
+const loggerMiddleware = (store) => (next) => (action) => {
+  console.log('Dispatching:', action);
+  next(action);
+};
+```
+## 60) Explain the purpose of mapStateToProps and mapDispatchToProps.
+- mapStateToProps: Maps Redux state to component props.
+#### Example:
+
+```bash
+const mapStateToProps = (state) => ({ count: state.count });
+```
+- mapDispatchToProps: Maps dispatch functions to component props.
+#### Example:
+
+```bash
+const mapDispatchToProps = (dispatch) => ({
+  increment: () => dispatch({ type: 'INCREMENT' }),
+});
+```
