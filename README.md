@@ -1178,3 +1178,172 @@ function ProtectedComponent({ role }) {
 - Cypress: For end-to-end testing.
 - Enzyme: For shallow and full rendering tests.
 
+
+
+## 81) How do you implement error boundaries in React?
+- Error boundaries catch JavaScript errors in their child components, preventing crashes and displaying fallback UIs instead.
+
+#### Key Points:
+- Can only catch errors in the rendering phase, lifecycle methods, and constructors.
+- Cannot catch errors in event handlers.
+#### Example:
+```bash
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    // Update state to show fallback UI
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, info) {
+    // Log the error (optional)
+    console.error("Error:", error, "Info:", info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong.</h1>;
+    }
+    return this.props.children;
+  }
+}
+
+// Usage
+<ErrorBoundary>
+  <MyComponent />
+</ErrorBoundary>
+```
+## 82) What is React Fiber?
+- React Fiber is the reimplementation of React’s rendering engine, introduced in React 16. It makes updates faster and smoother.
+
+#### Key Features:
+- Time-Slicing: Breaks rendering work into chunks for smooth UI rendering.
+- Concurrency: Enables React to handle updates like animations and user input efficiently.
+#### Example:
+- React Fiber improves scenarios where frequent updates, like typing or animations, happen.
+
+## 83) Explain reconciliation in React.
+- Reconciliation is React’s process for determining what changes are needed in the DOM. It uses a diffing algorithm to identify minimal updates.
+
+#### Example:
+- If a button changes its text:
+
+```bash
+function App() {
+  return <button>Click Me</button>;
+}
+// Updated to:
+function App() {
+  return <button>Clicked</button>;
+}
+// React only updates the button's text instead of re-rendering the entire component.
+```
+## 84) How does React handle hydration?
+- Hydration happens when React attaches event listeners to server-rendered HTML. It’s common in Server-Side Rendering (SSR) to make the static HTML interactive.
+
+#### Example:
+```bash
+ReactDOM.hydrate(<App />, document.getElementById('root'));
+```
+#### Why Use Hydration?
+- It improves page load speed while still providing React’s interactivity.
+
+## 85) What is server-side rendering (SSR) in React?
+- SSR generates the initial HTML on the server, sending it to the browser for rendering. It improves SEO and reduces the time for the page to display.
+
+#### Example (Next.js):
+```bash
+export async function getServerSideProps() {
+  const data = await fetch('/api/data');
+  return { props: { data } };
+}
+
+function Page({ data }) {
+  return <div>{data}</div>;
+}
+```
+## 86) How does SSR differ from client-side rendering (CSR)?
+### SSR	
+- Initial HTML is generated on the server.
+- Faster initial load time.
+- Better SEO.
+### CSR
+-	HTML is generated in the browser via JavaScript.
+- Slower initial load but faster subsequent interactions.
+-	SEO may require extra configuration.
+## 87) What is static site generation (SSG) in React?
+- SSG pre-renders pages at build time, creating static HTML files. It’s faster than SSR for content that rarely changes.
+
+#### Example (Next.js):
+```bash
+export async function getStaticProps() {
+  const data = await fetch('/api/data');
+  return { props: { data } };
+}
+
+function Page({ data }) {
+  return <div>{data}</div>;
+}
+```
+## 88) What are React Suspense and Concurrent Mode?
+- Suspense: Allows React to wait for asynchronous operations (like lazy loading) and show a fallback UI.
+- Concurrent Mode: Improves responsiveness by letting React handle multiple tasks simultaneously.
+#### Example with Suspense:
+```bash
+const LazyComponent = React.lazy(() => import('./MyComponent'));
+
+<Suspense fallback={<div>Loading...</div>}>
+  <LazyComponent />
+</Suspense>
+```
+## 89) How do you implement pagination in React?
+- Pagination splits data into smaller chunks for easier navigation.
+
+#### Example:
+```bash
+function PaginatedList({ items, itemsPerPage }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = items.slice(startIndex, startIndex + itemsPerPage);
+
+  return (
+    <div>
+      {currentItems.map((item) => (
+        <div key={item.id}>{item.name}</div>
+      ))}
+      <button onClick={() => setCurrentPage((prev) => prev - 1)}>Previous</button>
+      <button onClick={() => setCurrentPage((prev) => prev + 1)}>Next</button>
+    </div>
+  );
+}
+```
+## 90)How do you test React components using Jest?
+
+- Jest is a JavaScript testing framework used for unit tests, integration tests, and snapshots in React applications.
+
+#### Testing React Components:
+- Use Jest with @testing-library/react for rendering components and testing their behavior.
+#### Example:
+```bash
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import Button from './Button';
+
+test('renders the button and checks click event', () => {
+  const handleClick = jest.fn();
+  render(<Button onClick={handleClick}>Click Me</Button>);
+
+  // Assert text is rendered
+  expect(screen.getByText('Click Me')).toBeInTheDocument();
+
+  // Simulate click event
+  userEvent.click(screen.getByText('Click Me'));
+  expect(handleClick).toHaveBeenCalledTimes(1);
+});
+```
+
+
