@@ -1081,3 +1081,100 @@ return (
   </div>
 );
 ```
+
+## 71) How do you implement infinite scrolling in React?
+- Infinite scrolling loads more data when the user scrolls near the bottom of the page.
+
+#### Example:
+
+```bash
+useEffect(() => {
+  const handleScroll = () => {
+    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight) {
+      loadMoreData();
+    }
+  };
+  window.addEventListener('scroll', handleScroll);
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
+```
+## 72) What is the purpose of the useCallback hook?
+- useCallback memoizes a function to avoid unnecessary re-creations during re-renders.
+
+#### Example:
+
+```bash
+const memoizedFunction = useCallback(() => {
+  doSomething();
+}, [dependency]);
+```
+## 73) How does the useMemo hook work in React?
+- useMemo memoizes the result of a computation to optimize performance.
+
+#### Example:
+
+```bash
+const computedValue = useMemo(() => expensiveCalculation(data), [data]);
+```
+## 74) What are custom hooks in React? Provide an example.
+- Custom hooks encapsulate reusable logic.
+
+#### Example:
+
+```bash
+function useFetch(url) {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch(url).then((res) => res.json()).then(setData);
+  }, [url]);
+
+  return data;
+}
+
+const data = useFetch('/api/data');
+```
+## 75) How do you handle authentication in React?
+- Use libraries like Firebase, Auth0, or JWT for authentication. Store tokens in cookies or local storage and validate them on requests.
+
+## 76) What are JWTs, and how do they work in React?
+- JWTs (JSON Web Tokens) are a compact, self-contained way to represent authentication information.
+
+#### Example:
+
+- After login, the server issues a JWT.
+- The client stores the token and includes it in headers for authenticated requests.
+```bash
+fetch('/protected', {
+  headers: { Authorization: `Bearer ${token}` }
+});
+```
+## 77) How do you implement role-based access control in React?
+- Check roles before rendering components.
+
+#### Example:
+
+```bash
+function ProtectedComponent({ role }) {
+  return role === 'admin' ? <AdminPanel /> : <Unauthorized />;
+}
+```
+## 78) How do you implement drag-and-drop in React?
+- Use libraries like react-dnd or HTML5 drag-and-drop API.
+
+#### Example:
+
+```bash
+<div draggable onDragStart={handleDrag}>Drag Me</div>
+```
+
+## 79) How do you debug React applications?
+- Use React Developer Tools.
+- Add console.log statements.
+- Debug with browser tools or VS Code.
+## 80) What tools are commonly used to test React applications?
+- Jest: For unit testing.
+- React Testing Library: For component testing.
+- Cypress: For end-to-end testing.
+- Enzyme: For shallow and full rendering tests.
+
