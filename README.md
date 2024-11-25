@@ -1346,4 +1346,210 @@ test('renders the button and checks click event', () => {
 });
 ```
 
+## 91) What is the purpose of Enzyme in React testing?
+#### Purpose:
+- Enzyme, developed by Airbnb, is a React testing library that allows testing React components' output, state, and behavior. It provides shallow rendering, full DOM rendering, and static rendering.
 
+#### Example:
+```bash
+import { shallow } from 'enzyme';
+import App from './App';
+
+test('renders header', () => {
+  const wrapper = shallow(<App />);
+  expect(wrapper.find('h1').text()).toEqual('Welcome to My App');
+});
+```
+#### Key Difference:
+- While Enzyme tests specific component internals, React Testing Library focuses on user behavior.
+
+## 92) How do you implement Snapshot testing in React?
+#### Snapshot Testing Overview:
+- Snapshot testing ensures UI consistency by comparing the rendered output of a component to a saved "snapshot".
+
+#### Example:
+```bash
+import { render } from '@testing-library/react';
+import Header from './Header';
+
+test('renders correctly', () => {
+  const { asFragment } = render(<Header />);
+  expect(asFragment()).toMatchSnapshot();
+});
+```
+- When changes occur, the test fails, prompting you to update the snapshot.
+
+## 93) How do you integrate TypeScript with React?
+#### Steps:
+- Install TypeScript and type definitions:
+
+```bash
+npm install typescript @types/react @types/react-dom
+```
+- Rename .js files to .tsx.
+
+- Add a tsconfig.json:
+
+```bash
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "strict": true
+  }
+}
+```
+#### Example:
+```bash
+type Props = { message: string };
+
+const Greeting: React.FC<Props> = ({ message }) => <h1>{message}</h1>;
+```
+## 94) What are the benefits of using TypeScript in React projects?
+- Type Safety: Prevents runtime errors by catching type issues during development.
+- Better Developer Experience: Autocompletion, better refactoring, and clear documentation.
+- Early Bug Detection: Errors are identified at compile time.
+- Improved Code Readability: Types make the codebase easier to understand.
+
+## 95) How do you manage environment variables in React?
+#### Steps:
+- Create a .env file in the root directory:
+
+```bash
+REACT_APP_API_URL=https://api.example.com
+```
+- Access the variable in your code:
+
+```bash
+console.log(process.env.REACT_APP_API_URL);
+```
+
+
+## 96) How do you implement a theme switcher (dark mode) in React?
+#### Example:
+```bash
+import { useState } from 'react';
+
+function App() {
+  const [theme, setTheme] = useState('light');
+
+  return (
+    <div className={theme}>
+      <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+        Switch Theme
+      </button>
+    </div>
+  );
+}
+```
+#### CSS:
+
+```bash
+.light { background: white; color: black; }
+.dark { background: black; color: white; }
+```
+
+## 97) How do you handle file uploads in React?
+#### Example:
+```bash
+function FileUpload() {
+  const handleUpload = (event) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch('/upload', { method: 'POST', body: formData });
+  };
+
+  return <input type="file" onChange={handleUpload} />;
+}
+```
+## 98)How do you implement routing in React applications?
+
+- Routing in React is managed using libraries like React Router, allowing navigation between different components or pages without refreshing the browser.
+
+#### Example:
+- Install React Router:
+
+```bash
+npm install react-router-dom
+```
+- Set up routing in your app:
+
+```bash
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './Home';
+import About from './About';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+#### Here:
+
+- / renders the Home component.
+- /about renders the About component.
+## 99) What is the role of the <Switch> component in React Router?
+
+- In React Router v5, <Switch> was used to render the first child <Route> that matches the URL. It ensures only one route is rendered at a time.
+
+#### Example:
+```bash
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+function App() {
+  return (
+    <Router>
+      <Switch>
+        <Route path="/about" component={About} />
+        <Route path="/" component={Home} />
+      </Switch>
+    </Router>
+  );
+}
+```
+- If the path is /about, the About component is rendered.
+React Router v6 replaces <Switch> with <Routes>.
+## 100) How do you implement private routes in React?
+
+- Private routes restrict access to specific components/pages based on authentication.
+
+#### Example:
+```bash
+import { Navigate } from 'react-router-dom';
+
+function PrivateRoute({ children }) {
+  const isAuthenticated = !!localStorage.getItem('token'); // Example check
+
+  return isAuthenticated ? children : <Navigate to="/login" />;
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+- If the user is authenticated, they access the Dashboard.
+- Otherwise, they are redirected to /login.
