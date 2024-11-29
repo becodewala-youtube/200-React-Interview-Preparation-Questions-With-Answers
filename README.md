@@ -1169,9 +1169,11 @@ function ProtectedComponent({ role }) {
 ```
 
 ## 79) How do you debug React applications?
-- Use React Developer Tools.
-- Add console.log statements.
-- Debug with browser tools or VS Code.
+- React DevTools: Inspect the component tree and props/state.
+- Console logs: Use console.log() for debugging specific values.
+- Error boundaries: Catch errors in rendering or lifecycle methods.
+- Debugger: Use the browser's debugging tools or debugger keyword in your code.
+- Profiler: Analyze rendering performance with React DevTools.
 ## 80) What tools are commonly used to test React applications?
 - Jest: For unit testing.
 - React Testing Library: For component testing.
@@ -1553,3 +1555,247 @@ function App() {
 
 - If the user is authenticated, they access the Dashboard.
 - Otherwise, they are redirected to /login.
+
+
+## 101) What is React StrictMode?
+
+- React.StrictMode is a tool for highlighting potential problems in a React app. It doesn’t render anything visible to the UI but activates additional checks and warnings for its child components.
+
+### Features:
+- Detects unsafe lifecycle methods.
+- Warns about using deprecated APIs.
+- Highlights side effects in useEffect.
+#### Example:
+```bash
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+```
+## 102) What is the difference between the useState and useReducer hooks?
+| useState|useReducer ||| 
+ |------| ----|-------|-
+|Simpler API for managing local state.	|Better for complex state logic.
+Returns state and a state updater function.	|Returns state and a dispatch function.
+Suitable for simple toggles, counters, etc.	|Suitable for managing multiple related state updates.
+
+#### Example:
+- Using useState:
+
+```bash
+const [count, setCount] = useState(0);
+
+<button onClick={() => setCount(count + 1)}>Increment</button>;
+```
+- Using useReducer:
+
+```bash
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'increment': return state + 1;
+    case 'decrement': return state - 1;
+    default: return state;
+  }
+};
+
+const [count, dispatch] = useReducer(reducer, 0);
+
+<button onClick={() => dispatch({ type: 'increment' })}>Increment</button>;
+```
+## 103) How does the useContext hook work?
+
+- The useContext hook allows you to consume values from a React Context in functional components without using Consumer.
+
+#### Example:
+```bash
+const ThemeContext = React.createContext('light');
+
+function App() {
+  return (
+    <ThemeContext.Provider value="dark">
+      <Toolbar />
+    </ThemeContext.Provider>
+  );
+}
+
+function Toolbar() {
+  const theme = useContext(ThemeContext);
+  return <div>Current theme: {theme}</div>;
+}
+```
+## 104) What is a compound component pattern in React?
+
+- Compound components let you build reusable components where the parent component manages the state and logic while child components share this state.
+
+#### Example:
+```bash
+function Tabs({ children }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  return (
+    <div>
+      {React.Children.map(children, (child, index) =>
+        React.cloneElement(child, {
+          isActive: activeIndex === index,
+          onClick: () => setActiveIndex(index),
+        })
+      )}
+    </div>
+  );
+}
+
+function Tab({ isActive, onClick, children }) {
+  return <button onClick={onClick} style={{ fontWeight: isActive ? 'bold' : 'normal' }}>{children}</button>;
+}
+
+function App() {
+  return (
+    <Tabs>
+      <Tab>Tab 1</Tab>
+      <Tab>Tab 2</Tab>
+      <Tab>Tab 3</Tab>
+    </Tabs>
+  );
+}
+```
+## 105) How do you create a reusable component in React?
+
+- Reusable components are designed to work in multiple contexts by accepting props to customize their behavior and appearance.
+
+#### Example:
+```bash
+function Button({ children, onClick, variant = 'primary' }) {
+  const style = variant === 'primary' ? 'btn-primary' : 'btn-secondary';
+
+  return (
+    <button className={style} onClick={onClick}>
+      {children}
+    </button>
+  );
+}
+
+// Usage
+<Button variant="primary" onClick={() => alert('Clicked!')}>Click Me</Button>
+<Button variant="secondary" onClick={() => alert('Clicked!')}>Secondary Button</Button>
+```
+- This Button component can be reused across different parts of the app by changing props like variant or onClick.
+
+## 106)How would you optimize rendering performance in React?
+
+- Optimizing performance involves avoiding unnecessary renders and reducing DOM updates.
+
+### Techniques:
+- React.memo: Prevents unnecessary renders for functional components.
+- useCallback and useMemo: Optimize inline functions and computed values.
+- Code splitting: Load components on demand using React.lazy.
+- Virtualization: Render only visible items in a list (e.g., using react-window).
+- Avoid anonymous functions: Use memoized callbacks to prevent re-renders.
+#### Example:
+```bash
+const Button = React.memo(({ onClick, children }) => {
+  console.log('Button rendered');
+  return <button onClick={onClick}>{children}</button>;
+});
+
+function App() {
+  const [count, setCount] = React.useState(0);
+  const increment = React.useCallback(() => setCount((c) => c + 1), []);
+  return (
+    <div>
+      <Button onClick={increment}>Click Me</Button>
+    </div>
+  );
+}
+```
+## 107)How do you manage dependencies in a large React application?
+### Techniques:
+- Package.json: Maintain all dependencies with clear versioning.
+- Peer dependencies: Define shared dependencies for libraries.
+- Monorepos: Use tools like Lerna for multi-package projects.
+- npm audit: Regularly check for vulnerabilities.
+## 108) How do you implement animations in React?
+
+- Use libraries like React Spring, Framer Motion, or CSS animations.
+
+#### Example:
+- With Framer Motion:
+
+```bash
+import { motion } from 'framer-motion';
+
+function Box() {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      Animated Box
+    </motion.div>
+  );
+}
+```
+## 109)How do you implement a drag-and-drop feature in React?
+
+- Use libraries like react-dnd or react-beautiful-dnd.
+
+- With react-beautiful-dnd:
+
+```bash
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
+const items = [
+  { id: '1', text: 'Item 1' },
+  { id: '2', text: 'Item 2' },
+];
+
+function App() {
+  const onDragEnd = (result) => {
+    console.log(result);
+  };
+
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="list">
+        {(provided) => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
+            {items.map((item, index) => (
+              <Draggable key={item.id} draggableId={item.id} index={index}>
+                {(provided) => (
+                  <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                    {item.text}
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
+  );
+}
+```
+## 110) What is the role of CSS-in-JS libraries like styled-components in React?
+
+- CSS-in-JS allows you to write scoped CSS directly in JavaScript files, enabling dynamic styling based on props.
+
+#### Example:
+```bash
+import styled from 'styled-components';
+
+const Button = styled.button`
+  background-color: ${(props) => (props.primary ? 'blue' : 'gray')};
+  color: white;
+  padding: 10px;
+`;
+
+<Button primary>Primary Button</Button>;
+<Button>Secondary Button</Button>;
+```
