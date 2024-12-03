@@ -1799,3 +1799,215 @@ const Button = styled.button`
 <Button primary>Primary Button</Button>;
 <Button>Secondary Button</Button>;
 ```
+## 111)What is the difference between PureComponent and React.memo?
+- PureComponent: A class component that performs a shallow comparison of props and state to avoid unnecessary re-renders.
+- React.memo: A higher-order function used with functional components for similar optimization by memoizing the component.
+#### Example:
+- Using PureComponent:
+
+```bash
+import React, { PureComponent } from 'react';
+
+class MyComponent extends PureComponent {
+  render() {
+    console.log('Rendered PureComponent');
+    return <div>{this.props.value}</div>;
+  }
+}
+```
+- Using React.memo:
+
+```bash
+const MyFunctionalComponent = React.memo(({ value }) => {
+  console.log('Rendered Memoized Component');
+  return <div>{value}</div>;
+});
+```
+#### Key Difference:
+- PureComponent works with class components.
+- React.memo works with functional components.
+## 112) How do you use the useImperativeHandle hook?
+- useImperativeHandle customizes the instance value exposed when using React.forwardRef.
+
+#### Example:
+```bash
+import React, { useRef, forwardRef, useImperativeHandle } from 'react';
+
+const Input = forwardRef((props, ref) => {
+  const inputRef = useRef();
+
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputRef.current.focus();
+    },
+  }));
+
+  return <input ref={inputRef} />;
+});
+
+function App() {
+  const inputRef = useRef();
+
+  return (
+    <div>
+      <Input ref={inputRef} />
+      <button onClick={() => inputRef.current.focus()}>Focus Input</button>
+    </div>
+  );
+}
+```
+## 113) Explain the use of the React.forwardRef function.
+
+- React.forwardRef allows a parent component to pass a ref to a child component.
+
+#### Example:
+```bash
+const FancyButton = React.forwardRef((props, ref) => (
+  <button ref={ref}>{props.children}</button>
+));
+
+function App() {
+  const buttonRef = React.createRef();
+
+  return (
+    <FancyButton ref={buttonRef}>Click Me</FancyButton>
+  );
+}
+```
+## 114) What is the difference between React.lazy and loadable components?
+
+- React.lazy: Built-in React feature for code splitting via dynamic imports.
+- Loadable Components: A third-party library with additional features like loading indicators or error handling.
+#### Example:
+- React.lazy:
+
+```bash
+const LazyComponent = React.lazy(() => import('./MyComponent'));
+
+function App() {
+  return (
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent />
+    </React.Suspense>
+  );
+}
+```
+- Loadable Components:
+
+```bash
+import loadable from '@loadable/component';
+
+const LoadableComponent = loadable(() => import('./MyComponent'), {
+  fallback: <div>Loading...</div>,
+});
+
+function App() {
+  return <LoadableComponent />;
+}
+```
+## 115) What are some best practices for structuring a React project?
+#### Best Practices:
+- Modular structure:
+```bash
+src/
+├── components/
+├── pages/
+├── services/
+├── redux/ or context/
+├── utils/
+├── styles/
+└── App.js
+```
+- Reusable components: Break down the UI into small, composable components.
+- Feature-based folders: Organize files by feature for larger apps.
+- State management: Use Context API or Redux for global state.
+- Separate concerns: Keep logic (services) separate from components.
+## 116) How do you optimize bundle size in React?
+#### Techniques:
+- Code splitting with React.lazy and React.Suspense.
+- Tree shaking to remove unused code.
+- Dynamic imports for rarely used modules.
+- Use libraries like webpack-bundle-analyzer to analyze and reduce bundle size.
+#### Example:
+```bash
+const LazyComponent = React.lazy(() => import('./LargeComponent'));
+```
+## 117) How do you handle authentication using Firebase in React?
+#### Example:
+- Set up Firebase:
+
+```bash
+npm install firebase
+```
+- Initialize Firebase:
+
+```bash
+import firebase from 'firebase/app';
+import 'firebase/auth';
+
+const firebaseConfig = { apiKey: '...', authDomain: '...' };
+firebase.initializeApp(firebaseConfig);
+```
+- Sign-in Implementation:
+
+```bash
+const signInWithGoogle = () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider);
+};
+```
+## 118) How do you set up SSR using Next.js with React?
+#### Example:
+- Fetch data on the server:
+
+```bash
+export async function getServerSideProps() {
+  const res = await fetch('https://api.example.com/data');
+  const data = await res.json();
+
+  return { props: { data } };
+}
+
+function Page({ data }) {
+  return <div>{JSON.stringify(data)}</div>;
+}
+
+export default Page;
+```
+## 119) What are React error boundaries, and how do you implement them?
+
+- Error boundaries catch JavaScript errors in their child components.
+
+#### Example:
+```bash
+class ErrorBoundary extends React.Component {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error(error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong.</h1>;
+    }
+    return this.props.children;
+  }
+}
+```
+- Usage:
+
+```bash
+<ErrorBoundary>
+  <MyComponent />
+</ErrorBoundary>
+```
+## 120) How do you monitor performance in a React app?
+#### Tools:
+- React Profiler: Built-in tool to measure rendering performance.
+- Web Vitals: Monitor metrics like FCP, LCP, etc.
+- Third-party libraries: Use tools like Sentry or LogRocket for monitoring.
