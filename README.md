@@ -2011,3 +2011,168 @@ class ErrorBoundary extends React.Component {
 - React Profiler: Built-in tool to measure rendering performance.
 - Web Vitals: Monitor metrics like FCP, LCP, etc.
 - Third-party libraries: Use tools like Sentry or LogRocket for monitoring.
+
+
+## 121) What are synthetic events in React?
+
+- Synthetic events are React's wrapper around browser-native events, ensuring cross-browser compatibility.
+
+#### Example:
+```bash
+function App() {
+  const handleClick = (e) => {
+    console.log(e.nativeEvent); // Access native event
+    console.log(e);             // Synthetic event
+  };
+
+  return <button onClick={handleClick}>Click Me</button>;
+}
+```
+## 122) How do you avoid memory leaks in React?
+#### Techniques:
+- Cleanup in useEffect:
+
+```bash
+useEffect(() => {
+  const interval = setInterval(() => console.log('Running'), 1000);
+  return () => clearInterval(interval); // Cleanup
+}, []);
+```
+- Use AbortController to cancel API requests.
+
+## 123) What are the different lifecycle methods of React?
+
+#### React class components have:
+
+- Mounting: constructor, componentDidMount.
+- Updating: componentDidUpdate.
+- Unmounting: componentWillUnmount.
+- Functional components use hooks for similar functionality.
+
+## 124) What is Flux architecture?
+
+- Flux is an application architecture for managing unidirectional data flow in React apps. It has:
+
+- Actions: Dispatch actions to update the store.
+- Dispatcher: Central hub for event dispatching.
+- Store: Holds the state.
+- View: React components.
+## 125) How is Flux different from Redux?
+|Feature|	Flux|	Redux||
+|----|----|----|---|
+|Store	|Multiple stores	|Single store
+|Dispatcher|	Central dispatcher|	No dispatcher
+|State mutation|	Directly in store	|Pure reducers
+
+## 126) How do you use hooks to manage form validation?
+#### Example:
+```bash
+function App() {
+  const [email, setEmail] = React.useState('');
+  const [error, setError] = React.useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!email.includes('@')) {
+      setError('Invalid email');
+    } else {
+      setError('');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input value={email} onChange={(e) => setEmail(e.target.value)} />
+      {error && <span>{error}</span>}
+    </form>
+  );
+}
+```
+## 127) How would you implement caching in a React app?
+#### Techniques:
+- Use localStorage or sessionStorage.
+- Cache API responses with libraries like axios-cache-adapter.
+- Service Workers for offline caching.
+## 128) What is the purpose of React.cloneElement?
+
+- React.cloneElement clones a React element, optionally modifying its props or children.
+
+#### Example:
+```bash
+const Button = (props) => <button>{props.label}</button>;
+
+const App = () => {
+  const clonedButton = React.cloneElement(<Button />, { label: 'Click Me' });
+  return clonedButton;
+};
+```
+## 129)What is the purpose of React.Children.map?
+
+- React.Children.map is a utility method for iterating over children elements passed to a component. It ensures children are handled safely and works with fragments, null, and arrays.
+
+#### Example:
+```bash
+const Wrapper = ({ children }) => {
+  return React.Children.map(children, (child, index) => (
+    <div key={index} className="child-wrapper">
+      {child}
+    </div>
+  ));
+};
+
+function App() {
+  return (
+    <Wrapper>
+      <p>First Child</p>
+      <p>Second Child</p>
+    </Wrapper>
+  );
+}
+```
+#### Output:
+
+```bash
+<div class="child-wrapper"><p>First Child</p></div>
+<div class="child-wrapper"><p>Second Child</p></div>
+```
+## 130) What is the difference between React.PureComponent and React.Component?
+
+- React.Component: Re-renders every time props or state change, regardless of whether the changes are meaningful.
+- React.PureComponent: Implements a shallow comparison of props and state, re-rendering only when meaningful changes occur.
+#### Example:
+```bash
+import React, { Component, PureComponent } from 'react';
+
+class RegularComponent extends Component {
+  render() {
+    console.log('Regular Component Rendered');
+    return <div>{this.props.value}</div>;
+  }
+}
+
+class PureComp extends PureComponent {
+  render() {
+    console.log('Pure Component Rendered');
+    return <div>{this.props.value}</div>;
+  }
+}
+
+function App() {
+  return (
+    <>
+      <RegularComponent value="Hello" />
+      <PureComp value="Hello" />
+    </>
+  );
+}
+```
+#### Difference:
+
+- RegularComponent always renders.
+- PureComp renders only if props.value changes.
+
+
+
+
+
+
