@@ -41,7 +41,7 @@ const element = <h1>Hello, World!</h1>; // JSX
 ```bash
 const element = React.createElement('h1', null, 'Hello, World!');
 ```
-## 5)5. What is a React component?
+## 5) What is a React component?
 - A React component is a reusable piece of UI logic and markup. It can be a functional component (simpler) or a class component (more complex).
 #### Example:
 ```bash
