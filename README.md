@@ -2608,3 +2608,166 @@ function Button({ label, onClick }) {
 ```
 
 
+## 151) What are dynamic imports in React?
+### Example (Lazy Loading with React.lazy)
+```bash
+const LazyComponent = React.lazy(() => import("./HeavyComponent"));
+
+function App() {
+  return (
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent />
+    </React.Suspense>
+  );
+}
+```
+## 152) How do you manage state in React?
+- Local State (useState)
+- Global State (Context API, Redux)
+- Server State (React Query)
+### Example (Using Context API for Global State)
+```bash
+const ThemeContext = React.createContext();
+
+function App() {
+  const [theme, setTheme] = React.useState("light");
+
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      <ChildComponent />
+    </ThemeContext.Provider>
+  );
+}
+
+function ChildComponent() {
+  const { theme } = React.useContext(ThemeContext);
+  return <p>Current theme: {theme}</p>;
+}
+```
+## 153)What is React Profiler?
+- React Profiler is a built-in tool to measure the performance of components by tracking rendering times and identifying slow components.
+
+### Example: Wrapping a Component with Profiler
+```bash
+import { Profiler } from "react";
+
+function onRenderCallback(id, phase, actualDuration) {
+  console.log(`Component: ${id}, Phase: ${phase}, Render time: ${actualDuration}ms`);
+}
+
+function App() {
+  return (
+    <Profiler id="MyComponent" onRender={onRenderCallback}>
+      <MyComponent />
+    </Profiler>
+  );
+}
+```
+## 154) How do you create dynamic forms in React?
+- You can create dynamic forms using state and map() to render inputs dynamically.
+
+### Example: Adding Dynamic Input Fields
+```bash
+function DynamicForm() {
+  const [fields, setFields] = React.useState([""]);
+
+  const addField = () => setFields([...fields, ""]);
+  const updateField = (index, value) => {
+    const newFields = [...fields];
+    newFields[index] = value;
+    setFields(newFields);
+  };
+
+  return (
+    <div>
+      {fields.map((field, index) => (
+        <input key={index} value={field} onChange={(e) => updateField(index, e.target.value)} />
+      ))}
+      <button onClick={addField}>Add Field</button>
+    </div>
+  );
+}
+```
+## 155) How do you handle asynchronous code in React?
+- You can use async/await inside useEffect or handle Promises.
+
+### Example: Fetching Data with useEffect
+```bash
+function FetchData() {
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(() => {
+    async function fetchData() {
+      const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+      const result = await response.json();
+      setData(result);
+    }
+    fetchData();
+  }, []);
+
+  return <ul>{data.map((item) => <li key={item.id}>{item.title}</li>)}</ul>;
+}
+```
+
+## 156) How do you implement internationalization in React?
+- Use libraries like react-intl or i18next.
+
+### Example using react-i18next
+```bash
+import { useTranslation } from "react-i18next";
+
+function App() {
+  const { t } = useTranslation();
+  return <h1>{t("welcome_message")}</h1>;
+}
+```
+## 157) How do you debug React Hooks?
+- Use React DevTools to inspect hooks.
+- Use console.log() inside hooks.
+- Avoid infinite loops by setting dependencies correctly in useEffect.
+## 158) What are WebSockets, and how are they used in React?
+- WebSockets enable real-time communication between the client and server.
+
+### Example using WebSockets in React
+```bash
+const socket = new WebSocket("ws://example.com/socket");
+
+socket.onopen = () => console.log("Connected");
+socket.onmessage = (event) => console.log("Message:", event.data);
+```
+## 159) How do you implement breadcrumbs in React?
+- Breadcrumbs show the navigation path.
+
+### Example: Simple Breadcrumb Component
+```bash
+import { Link } from "react-router-dom";
+
+function Breadcrumbs({ paths }) {
+  return (
+    <nav>
+      {paths.map((path, index) => (
+        <span key={index}>
+          <Link to={path.link}>{path.label}</Link> {index < paths.length - 1 && " / "}
+        </span>
+      ))}
+    </nav>
+  );
+}
+```
+## 160) How do you implement notifications in React?
+- Use a library like react-toastify.
+
+### Example: Toast Notifications
+```bash
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+function App() {
+  return (
+    <div>
+      <button onClick={() => toast.success("Success!")}>Show Notification</button>
+      <ToastContainer />
+    </div>
+  );
+}
+```
