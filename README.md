@@ -2173,6 +2173,438 @@ function App() {
 
 
 
+## 131)How do you manage side effects in React apps?
 
+- Side effects like fetching data, subscriptions, and manual DOM updates are handled using the useEffect hook or lifecycle methods in class components.
+
+#### Example:
+- Fetching data with useEffect:
+
+```bash
+import React, { useEffect, useState } from 'react';
+
+function App() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch('https://api.example.com/data')
+      .then((res) => res.json())
+      .then((result) => setData(result));
+
+    return () => {
+      console.log('Cleanup if necessary, like cancelling subscriptions.');
+    };
+  }, []); // Empty dependency array = run only on mount.
+
+  return <ul>{data.map((item) => <li key={item.id}>{item.name}</li>)}</ul>;
+}
+```
+## 132) How do you handle errors in React?
+
+- React provides Error Boundaries and the componentDidCatch lifecycle for handling errors in class components. For functional components, error handling can involve try-catch blocks or libraries like React Query for API errors.
+
+#### Example of Error Boundary:
+```bash
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, info) {
+    console.error('Error:', error, 'Info:', info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong.</h1>;
+    }
+    return this.props.children;
+  }
+}
+
+function FaultyComponent() {
+  throw new Error('Intentional Error');
+}
+
+function App() {
+  return (
+    <ErrorBoundary>
+      <FaultyComponent />
+    </ErrorBoundary>
+  );
+}
+```
+## 133) What are forward refs in React?
+
+- Forward refs allow passing a ref from a parent to a child component, granting the parent access to the child’s DOM or component instance.
+
+#### Example:
+```bash
+import React, { forwardRef } from 'react';
+
+const Input = forwardRef((props, ref) => <input ref={ref} {...props} />);
+
+function App() {
+  const inputRef = React.useRef();
+
+  return (
+    <>
+      <Input ref={inputRef} placeholder="Enter text" />
+      <button onClick={() => inputRef.current.focus()}>Focus Input</button>
+    </>
+  );
+}
+```
+## 134) How do you optimize API calls in React?
+#### Techniques:
+- Debounce/throttle API calls:
+
+```bash
+import { debounce } from 'lodash';
+const fetchDebounced = debounce(() => fetchData(), 500);
+```
+- Use React Query:
+
+```bash
+import { useQuery } from 'react-query';
+
+const { data, isLoading } = useQuery('fetchData', fetchData);
+```
+- Cache results in local state or libraries like Redux.
+
+- Avoid unnecessary calls with proper dependency arrays in useEffect.
+
+## 135) What are the common anti-patterns in React?
+#### Examples of Anti-Patterns:
+- Mutating state directly:
+
+```bash
+this.state.count = 10; // WRONG
+this.setState({ count: 10 }); // Correct
+```
+- Overusing Redux/Context API:
+
+- Avoid managing local component states like form inputs in Redux.
+#### Excessive re-renders:
+
+- Use React.memo or useCallback to avoid unnecessary re-renders.
+- Not cleaning up side effects:
+
+```bash
+useEffect(() => {
+  const interval = setInterval(doSomething, 1000);
+  return () => clearInterval(interval); // Cleanup
+}, []);
+```
+## 136) How do you improve SEO in React apps?
+#### Techniques:
+- Server-Side Rendering (SSR) with Next.js:
+
+```bash
+export async function getServerSideProps() {
+  const data = await fetchData();
+  return { props: { data } };
+}
+```
+- Meta tags using libraries like React Helmet:
+
+```bash
+import { Helmet } from 'react-helmet';
+
+function App() {
+  return (
+    <Helmet>
+      <title>My App</title>
+      <meta name="description" content="SEO optimized description" />
+    </Helmet>
+  );
+}
+```
+- Dynamic routing with clear URLs.
+
+- Pre-rendering and static generation.
+
+## 137) How do you implement a carousel in React?
+### Example using a library:
+```bash
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+
+function App() {
+  return (
+    <Carousel infinite autoPlay>
+      <div>Item 1</div>
+      <div>Item 2</div>
+      <div>Item 3</div>
+    </Carousel>
+  );
+}
+```
+- Custom Implementation:
+```bash
+function Carousel({ items }) {
+  const [index, setIndex] = React.useState(0);
+
+  return (
+    <div>
+      <button onClick={() => setIndex((prev) => (prev - 1 + items.length) % items.length)}>Prev</button>
+      <div>{items[index]}</div>
+      <button onClick={() => setIndex((prev) => (prev + 1) % items.length)}>Next</button>
+    </div>
+  );
+}
+```
+## 138) How do you handle file uploads in React?
+### Example:
+- HTML Input and State:
+
+```bash
+function App() {
+  const [file, setFile] = React.useState(null);
+
+  const handleFileUpload = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+  return <input type="file" onChange={handleFileUpload} />;
+}
+```
+- Uploading to a Server:
+
+```bash
+const handleUpload = async () => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await fetch('/upload', {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (response.ok) {
+    console.log('File uploaded successfully');
+  }
+};
+```
+- Uploading to Firebase:
+```bash
+import { storage } from './firebase';
+
+const uploadToFirebase = () => {
+  const storageRef = storage.ref(`files/${file.name}`);
+  storageRef.put(file).then(() => {
+    console.log('Uploaded to Firebase');
+  });
+};
+```
+## 139) How do you design responsive components in React?
+
+### Responsive components adjust their layout based on screen size. You can achieve this using:
+
+- CSS Media Queries
+- CSS-in-JS libraries like Styled Components
+- Flexbox/Grid
+- Tailwind CSS
+- React libraries like react-responsive
+### Example (Using Tailwind CSS)
+```bash
+function ResponsiveCard() {
+  return (
+    <div className="max-w-sm md:max-w-md lg:max-w-lg p-4 bg-gray-100 rounded-lg">
+      <h2 className="text-lg md:text-xl lg:text-2xl font-bold">Responsive Component</h2>
+      <p className="text-sm md:text-base">This adjusts based on screen size.</p>
+    </div>
+  );
+}
+```
+## 140) What are controlled and uncontrolled components in React?
+
+- Controlled Component: React controls the state of the input.
+- Uncontrolled Component: The DOM itself maintains the state.
+### Example (Controlled Component)
+```bash
+function ControlledInput() {
+  const [value, setValue] = React.useState("");
+
+  return <input type="text" value={value} onChange={(e) => setValue(e.target.value)} />;
+}
+```
+### Example (Uncontrolled Component with Ref)
+```bash
+function UncontrolledInput() {
+  const inputRef = React.useRef();
+
+  return (
+    <div>
+      <input type="text" ref={inputRef} />
+      <button onClick={() => alert(inputRef.current.value)}>Get Value</button>
+    </div>
+  );
+}
+```
+## 141) How do you optimize images in React?
+### Techniques:
+- Use optimized formats like WebP
+- Lazy Loading with React Lazy Load
+- Use a CDN for faster loading
+- Use Image Compression Libraries
+### Example (Lazy Loading with react-lazy-load-image-component)
+```bash
+import { LazyLoadImage } from "react-lazy-load-image-component";
+
+function OptimizedImage() {
+  return <LazyLoadImage src="image.webp" alt="Optimized" effect="blur" />;
+}
+```
+
+## 142) How do you implement live chat in a React app?
+### Using Firebase Firestore
+```bash
+import { useState, useEffect } from "react";
+import { db } from "./firebase";
+import { collection, addDoc, onSnapshot } from "firebase/firestore";
+
+function ChatApp() {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "messages"), (snapshot) => {
+      setMessages(snapshot.docs.map((doc) => doc.data()));
+    });
+    return unsubscribe;
+  }, []);
+
+  const sendMessage = async () => {
+    await addDoc(collection(db, "messages"), { text: input });
+    setInput("");
+  };
+
+  return (
+    <div>
+      {messages.map((msg, index) => (
+        <p key={index}>{msg.text}</p>
+      ))}
+      <input value={input} onChange={(e) => setInput(e.target.value)} />
+      <button onClick={sendMessage}>Send</button>
+    </div>
+  );
+}
+```
+## 143) What is React PropTypes?
+### Used for type checking of props in React.
+
+### Example:
+```bash
+import PropTypes from "prop-types";
+
+function Greeting({ name }) {
+  return <h1>Hello, {name}</h1>;
+}
+
+Greeting.propTypes = {
+  name: PropTypes.string.isRequired,
+};
+```
+## 144) How do you integrate an API with React?
+### Example (Using Fetch API)
+```bash
+function App() {
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(() => {
+    fetch("https://api.example.com/data")
+      .then((res) => res.json())
+      .then((data) => setData(data));
+  }, []);
+
+  return <ul>{data.map((item) => <li key={item.id}>{item.name}</li>)}</ul>;
+}
+```
+## 145) How do you optimize React app performance?
+- Use React.memo to prevent unnecessary re-renders.
+- Use useCallback and useMemo for performance optimizations.
+- Lazy Load Components.
+- Optimize API calls using React Query.
+## 146) What are React Fragments?
+
+- Allows grouping elements without an extra DOM node.
+
+### Example:
+```bash
+function App() {
+  return (
+    <>
+      <h1>Title</h1>
+      <p>Some text</p>
+    </>
+  );
+}
+```
+## 147) How does React handle keys in lists?
+- Keys help React identify changes in lists for efficient updates.
+
+### Example:
+```bash
+const items = ["Apple", "Banana", "Cherry"];
+
+function List() {
+  return (
+    <ul>
+      {items.map((item, index) => (
+        <li key={index}>{item}</li> // Bad practice, use unique ID if possible
+      ))}
+    </ul>
+  );
+}
+```
+## 148) How does reconciliation work in React?
+- React uses a Virtual DOM and a diffing algorithm to update only the necessary parts of the UI.
+
+## 149) What is the difference between useState and useEffect?
+| Feature  | useState                               | useEffect                            |  
+|----------|----------------------------------------|-------------------------------------|  
+| Purpose  | Manage component state                 | Perform side effects                 |  
+| Runs     | When state updates                     | After render                         |  
+| Example  | `const [count, setCount] = useState(0);` | `useEffect(() => { fetchData(); }, []);` |
+
+## 149) What are compound components in React?
+
+- A pattern where multiple components work together within a parent.
+
+### Example:
+```bash
+function Modal({ children }) {
+  return <div className="modal">{children}</div>;
+}
+
+Modal.Header = ({ children }) => <h2>{children}</h2>;
+Modal.Body = ({ children }) => <p>{children}</p>;
+
+function App() {
+  return (
+    <Modal>
+      <Modal.Header>Title</Modal.Header>
+      <Modal.Body>Body Content</Modal.Body>
+    </Modal>
+  );
+}
+```
+## 150) How do you design a reusable React component?
+- Use props to make components flexible.
+- Accept children for customization.
+- Avoid hardcoding styles.
+### Example:
+```bash
+function Button({ label, onClick }) {
+  return <button onClick={onClick}>{label}</button>;
+}
+<Button label="Click Me" onClick={() => alert("Clicked!")} />;
+```
 
 
