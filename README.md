@@ -402,18 +402,18 @@ const MemoizedComponent = React.memo(({ count }) => {
 ```bash
 const handleClick = React.useCallback(() => { console.log('Clicked'); }, []);
 ```
-## 32) How do you implement code splitting in React?
+## 33) How do you implement code splitting in React?
 - Code splitting breaks large bundles into smaller chunks using React.lazy and dynamic imports.
 #### Example:
 
 ```bash
 const Component = React.lazy(() => import('./Component'));
 ```
-## 33) What is the difference between a library and a framework? Is React a library or framework?
+## 34) What is the difference between a library and a framework? Is React a library or framework?
 - Library: A collection of tools to help build applications (React).
 - Framework: Provides a complete structure for application development (Angular).
 - React is a library focused on UI.
-## 34) How do you fetch data in React applications?
+## 35) How do you fetch data in React applications?
 - Data can be fetched using fetch, Axios, or third-party libraries. Typically, data fetching is done in useEffect or lifecycle methods.
 #### Example:
 
@@ -428,7 +428,7 @@ function App() {
   return <ul>{data.map((item) => <li key={item.id}>{item.title}</li>)}</ul>;
 }
 ```
-## 35)Explain the purpose of the useEffect hook.
+## 36)Explain the purpose of the useEffect hook.
 - useEffect manages side effects in functional components, like fetching data, updating the DOM, or subscribing to events. It runs after the component renders or when dependencies change.
 
 #### Example:
@@ -448,7 +448,7 @@ function App() {
   return <ul>{data.map((item) => <li key={item.id}>{item.title}</li>)}</ul>;
 }
 ```
-## 36)How do you use React Router?
+## 37)How do you use React Router?
 - React Router allows navigation between different pages in a React app. It provides components like Routes, Route, and Link for routing.
 
 #### Example:
@@ -479,12 +479,6 @@ function About() {
   return <h1>About Page</h1>;
 }
 ```
-
-## 37) What is the purpose of <BrowserRouter> in React Router?
-- <BrowserRouter> provides the context for managing navigation and history in a React app. It uses the HTML5 history API to keep the UI in sync with the URL.
-
-#### Example:
-- In the example above, <BrowserRouter> wraps the app to enable routing.
 ## 38) How do you manage routing for nested components?
 - Use nested <Route> elements within parent routes to define nested routing.
 
