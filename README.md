@@ -2765,3 +2765,221 @@ function App() {
   );
 }
 ```
+
+## 161) How do you create a custom hook?
+- Custom hooks allow reusing logic across components.
+
+### Example: Custom Hook for Fetching Data
+```bash
+function useFetch(url) {
+  const [data, setData] = React.useState(null);
+
+  React.useEffect(() => {
+    async function fetchData() {
+      const response = await fetch(url);
+      const result = await response.json();
+      setData(result);
+    }
+    fetchData();
+  }, [url]);
+
+  return data;
+}
+
+function App() {
+  const data = useFetch("https://jsonplaceholder.typicode.com/posts");
+  return <pre>{JSON.stringify(data, null, 2)}</pre>;
+}
+```
+## 162) What is the Context API?
+- Used for managing global state without prop drilling.
+
+### Example: Using Context API for Theme Management
+```bash
+const ThemeContext = React.createContext();
+
+function App() {
+  const [theme, setTheme] = React.useState("light");
+
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      <Child />
+    </ThemeContext.Provider>
+  );
+}
+
+function Child() {
+  const { theme } = React.useContext(ThemeContext);
+  return <p>Current theme: {theme}</p>;
+}
+```
+## 163) How do you integrate Redux with React?
+- Install react-redux and @reduxjs/toolkit.
+- Create a Redux store.
+- Use useSelector to get state and useDispatch to update state.
+### Example: Redux Setup
+```bash
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { Provider, useDispatch, useSelector } from "react-redux";
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState: 0,
+  reducers: {
+    increment: (state) => state + 1,
+  },
+});
+
+const store = configureStore({ reducer: counterSlice.reducer });
+
+function Counter() {
+  const count = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  return <button onClick={() => dispatch(counterSlice.actions.increment())}>Count: {count}</button>;
+}
+
+function App() {
+  return (
+    <Provider store={store}>
+      <Counter />
+    </Provider>
+  );
+}
+```
+## 164) How do you handle multiple themes in React?
+### Example: Using Tailwind CSS Themes
+```bash
+const themes = { light: "bg-white text-black", dark: "bg-black text-white" };
+
+function App() {
+  const [theme, setTheme] = React.useState("light");
+
+  return (
+    <div className={themes[theme]}>
+      <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>Toggle Theme</button>
+    </div>
+  );
+}
+```
+## 165) What is the purpose of React.Children.toArray?
+- It ensures children are a flat array with keys, preventing errors.
+
+### Example: Using React.Children.toArray
+```bash
+function Parent({ children }) {
+  return <div>{React.Children.toArray(children).map((child) => child)}</div>;
+}
+
+function App() {
+  return (
+    <Parent>
+      <h1>Hello</h1>
+      <h2>World</h2>
+    </Parent>
+  );
+}
+```
+## 166) What are React Design Patterns?
+- React design patterns are best practices and reusable solutions for common problems in React applications.
+
+### Common Design Patterns in React
+- Container-Presentational Pattern → Separates logic (Container) from UI (Presentational).
+- Higher-Order Components (HOC) → Reusable component logic via function wrappers.
+- Render Props → Uses a function prop to render dynamic UI.
+- Compound Components → Components work together by sharing state/context.
+- Controlled & Uncontrolled Components → Manage form inputs effectively.
+### Example: Container-Presentational Pattern
+```bash
+function DataContainer() {
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/posts")
+      .then((res) => res.json())
+      .then(setData);
+  }, []);
+
+  return <PresentationalComponent data={data} />;
+}
+
+function PresentationalComponent({ data }) {
+  return <ul>{data.map((item) => <li key={item.id}>{item.title}</li>)}</ul>;
+}
+```
+## 167) How do you implement modals in React?
+- You can use state and conditional rendering or libraries like react-modal.
+
+### Example: Simple Modal
+```bash
+function ModalExample() {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setIsOpen(true)}>Open Modal</button>
+      {isOpen && (
+        <div className="modal">
+          <p>Modal Content</p>
+          <button onClick={() => setIsOpen(false)}>Close</button>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+## 168) How do you manage forms in React?
+- Forms can be managed using controlled components, useState(), or libraries like react-hook-form.
+
+### Example: Controlled Form with useState
+```bash
+function FormExample() {
+  const [name, setName] = React.useState("");
+
+  return (
+    <form onSubmit={(e) => e.preventDefault()}>
+      <input value={name} onChange={(e) => setName(e.target.value)} />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+## 169) What are Render Props in React?
+- A Render Prop is a function prop that determines what gets rendered.
+
+### Example: Render Props
+```bash
+function DataProvider({ render }) {
+  const [count, setCount] = React.useState(0);
+
+  return <div>{render(count, () => setCount(count + 1))}</div>;
+}
+
+function App() {
+  return (
+    <DataProvider
+      render={(count, increment) => (
+        <>
+          <p>Count: {count}</p>
+          <button onClick={increment}>Increment</button>
+        </>
+      )}
+    />
+  );
+}
+```
+## 170) How do you implement lazy loading in React?
+- Use React.lazy() and Suspense to load components on demand.
+
+### Example: Lazy Loading a Component
+```bash
+const LazyComponent = React.lazy(() => import("./HeavyComponent"));
+
+function App() {
+  return (
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent />
+    </React.Suspense>
+  );
+}
+```
