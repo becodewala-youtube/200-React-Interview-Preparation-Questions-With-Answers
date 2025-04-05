@@ -2983,3 +2983,209 @@ function App() {
   );
 }
 ```
+## 171) How do you handle forms in React?
+### Forms can be handled via:
+
+- Controlled components (useState).
+
+- Formik (validations, form state management).
+
+- react-hook-form (efficient form handling).
+
+#### Example: Using react-hook-form
+```bash
+import { useForm } from "react-hook-form";
+
+function FormExample() {
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = (data) => console.log(data);
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register("name")} placeholder="Enter Name" />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+## 172) How do you manage dependencies in React apps?
+- Use package managers (npm or yarn) to install/update dependencies.
+
+- Use package.json to define exact versions (dependencies and devDependencies).
+
+- Use npm audit to check for vulnerabilities.
+
+- Lock versions (package-lock.json or yarn.lock).
+
+## 173) How do you debug Redux applications?
+- Use Redux DevTools Extension – Inspect actions, state, and time-travel debugging.
+
+- Log actions in Middleware – Add logging middleware.
+
+- Check mapStateToProps and useSelector for correct state retrieval.
+
+- Use breakpoints in Redux reducers.
+
+#### Example: Logging Redux Actions
+```bash
+const loggerMiddleware = (store) => (next) => (action) => {
+  console.log("Dispatching:", action);
+  return next(action);
+};
+```
+## 174) What is the purpose of useLayoutEffect hook?
+- Similar to useEffect, but runs before the browser paints the screen.
+
+- Used when DOM measurements or synchronous updates are required.
+
+#### Example: Using useLayoutEffect
+```bash
+function Example() {
+  const inputRef = React.useRef();
+
+  React.useLayoutEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  return <input ref={inputRef} />;
+}
+```
+- Here, useLayoutEffect ensures the input is focused before the browser paints the UI.
+
+## 175) How do you implement virtual scrolling in React?
+- Virtual scrolling renders only visible elements, improving performance for large lists.
+- Use libraries like react-window or react-virtualized.
+
+#### Example: Virtual Scrolling with react-window
+```bash
+import { FixedSizeList as List } from "react-window";
+
+const items = Array.from({ length: 1000 }, (_, i) => `Item ${i}`);
+
+function VirtualizedList() {
+  return (
+    <List height={300} width={300} itemSize={30} itemCount={items.length}>
+      {({ index, style }) => <div style={style}>{items[index]}</div>}
+    </List>
+  );
+}
+```
+- This only renders visible items instead of all 1000 items.
+
+## 176) How do you optimize performance in large-scale React applications?
+- Performance optimization in React involves reducing unnecessary renders, optimizing rendering logic, and improving data fetching efficiency.
+
+### Key Techniques for Optimization
+#### Use React.memo for Pure Components
+
+- Prevents unnecessary re-renders by memoizing components.
+
+```bash
+const MemoizedComponent = React.memo(({ data }) => {
+  console.log("Rendering...");
+  return <div>{data}</div>;
+});
+
+function App() {
+  const [count, setCount] = React.useState(0);
+  return (
+    <div>
+      <MemoizedComponent data="Hello" />
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+```
+#### Use useCallback to Memoize Functions
+
+- Ensures the same function reference is passed to child components.
+
+```bash
+const memoizedFunction = useCallback(() => {
+  console.log("Function not recreated");
+}, []);
+```
+#### Use useMemo for Expensive Computations
+
+- Memoizes expensive calculations.
+
+```bash
+const expensiveValue = useMemo(() => computeExpensiveValue(input), [input]);
+```
+#### Use Lazy Loading and Code Splitting
+
+- Load components dynamically only when needed.
+
+```bash
+const LazyComponent = React.lazy(() => import("./HeavyComponent"));
+```
+#### Virtualize Long Lists
+
+- Use react-window for efficient rendering of long lists.
+
+```bash
+import { FixedSizeList as List } from "react-window";
+```
+#### Optimize Context API Performance
+
+- Avoid unnecessary context re-renders by structuring providers efficiently.
+
+## 177) What are React Fiber and its advantages over the old reconciliation algorithm?
+- React Fiber is React's reconciliation engine that improves performance, concurrency, and responsiveness.
+
+### Advantages Over Old Reconciliation
+- Time-Slicing for Non-Blocking Rendering
+
+- Fiber splits rendering into chunks, preventing UI blocking.
+
+- Concurrent Mode Support
+
+- Enables Suspense, React Concurrent Mode, and Transitions.
+
+- Error Handling with Error Boundaries
+
+- Improves error recovery and debugging.
+
+- Improved Animation Performance
+
+- Animations are smoother due to incremental rendering.
+
+## 178) How does React’s rendering mechanism work internally?
+### React follows a two-phase rendering process:
+
+- Render Phase (Reconciliation)
+
+- Creates a virtual DOM tree.
+
+- Uses React Fiber to determine minimal changes.
+
+- Commit Phase
+
+- Applies changes to the actual DOM.
+
+## 179) How does React handle concurrent rendering with Suspense and React Concurrent Mode?
+- Concurrent Mode improves responsiveness by allowing rendering to be interruptible.
+
+#### Example: Using Suspense
+```bash
+const LazyComponent = React.lazy(() => import("./Component"));
+
+function App() {
+  return (
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent />
+    </React.Suspense>
+  );
+}
+```
+## 180) How do you minimize re-renders in React applications?
+- Use React.memo() for components.
+
+- Use useCallback() for function dependencies.
+
+- Optimize Context API usage.
+
+- Use useReducer() for complex state management.
+
+- Use useMemo() for derived values.
