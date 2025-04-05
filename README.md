@@ -3189,3 +3189,92 @@ function App() {
 - Use useReducer() for complex state management.
 
 - Use useMemo() for derived values.
+
+
+
+
+## 181) How do you handle memory leaks in React applications?
+- Unsubscribe from API calls in useEffect.
+
+- Remove event listeners in cleanup functions.
+
+- Avoid storing large objects in state.
+
+## 182) What is tree shaking, and how does it improve performance in React?
+- Tree shaking eliminates unused JavaScript code during the bundling process.
+
+#### Example: Removing Unused Code
+```bash
+// Importing only necessary functions
+import { specificFunction } from "large-library";
+```
+## 183) What is Code Splitting, and how does it work in React?
+- Code Splitting reduces initial load time by dynamically loading JavaScript.
+
+#### Example with React.lazy
+```bash
+const LazyComponent = React.lazy(() => import("./Component"));
+```
+## 184) How do you handle expensive calculations efficiently in React?
+- Use useMemo() to memoize computations.
+
+- Move expensive logic to Web Workers.
+
+## 185) What is a Render Prop, and how does it compare to Higher-Order Components?
+- A Render Prop is a function passed as a prop that renders UI dynamically.
+
+#### Example: Render Prop
+```bash
+const MouseTracker = ({ render }) => {
+  const [position, setPosition] = React.useState({ x: 0, y: 0 });
+
+  return <div>{render(position)}</div>;
+};
+```
+## 186) How do you implement an infinite scrolling feature in React?
+- Use the Intersection Observer API or react-infinite-scroll-component.
+
+#### Example
+```bash
+const observer = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    fetchMoreData();
+  }
+});
+```
+## 187) Best practices for useMemo and useCallback in React
+- Use useMemo() for expensive calculations.
+
+- Use useCallback() for function dependencies.
+
+## 188) What is whyDidYouRender, and how can it help optimize performance?
+####  whyDidYouRender is a library that helps detect unnecessary re-renders.
+
+-  Installation
+```bash
+npm install @welldone-software/why-did-you-render
+```
+## 189) How does useReducer differ from useState in managing complex state logic?
+- useState() is for simple state updates.
+
+- useReducer() is for complex state logic.
+
+### Example: useReducer
+```bash
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "INCREMENT":
+      return { count: state.count + 1 };
+    default:
+      return state;
+  }
+};
+
+const [state, dispatch] = useReducer(reducer, { count: 0 });
+```
+## 190) Difference between useRef, createRef, and forwardRef
+- useRef() → Persistent references.
+
+- createRef() → New reference on every render.
+
+- forwardRef() → Pass refs to child components.
