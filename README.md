@@ -3278,3 +3278,235 @@ const [state, dispatch] = useReducer(reducer, { count: 0 });
 - createRef() → New reference on every render.
 
 - forwardRef() → Pass refs to child components.
+
+
+
+
+## 191) How to persist state across page reloads in React?
+- Use localStorage or sessionStorage.
+
+#### Example
+```bash
+const [data, setData] = React.useState(() => {
+  return JSON.parse(localStorage.getItem("data")) || "";
+});
+
+React.useEffect(() => {
+  localStorage.setItem("data", JSON.stringify(data));
+}, [data]);
+```
+## 192) How to handle debouncing and throttling in React?
+- Use lodash for debouncing.
+
+#### Example: Debounce Input
+```bash
+import { debounce } from "lodash";
+
+const debouncedSearch = debounce((query) => {
+  fetchData(query);
+}, 500);
+```
+## 193) How to implement global state management without Redux?
+- React Context API
+
+- Zustand
+
+- Recoil
+
+- Jotai
+
+## 194) Differences between Redux Toolkit and traditional Redux
+|Feature	|Redux Toolkit|	Traditional Redux|
+|----- |----- |----- |
+| Boilerplate|	Less|	More|
+|Configuration|	Easy|	Manual|
+|Async Handling	|createAsyncThunk	|Middleware required|
+
+## 195) What are selectors in Redux, and how do they improve performance?
+- Selectors memoize data to avoid unnecessary calculations.
+
+#### Example
+```bash
+import { createSelector } from "reselect";
+
+const selectUsers = (state) => state.users;
+
+const selectActiveUsers = createSelector([selectUsers], (users) =>
+  users.filter((user) => user.active)
+);
+```
+
+## 196) How do you create dynamic forms in React?
+- Dynamic forms allow you to create form fields based on data or user interaction.
+
+#### ✅ Use Case:
+- You want to render form inputs based on an array of objects.
+
+#### 🧠 Example:
+```bash
+const formFields = [
+  { name: 'username', label: 'Username', type: 'text' },
+  { name: 'email', label: 'Email', type: 'email' },
+  { name: 'age', label: 'Age', type: 'number' }
+];
+
+function DynamicForm() {
+  const [formData, setFormData] = React.useState({});
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {formFields.map(field => (
+        <div key={field.name}>
+          <label>{field.label}</label>
+          <input
+            name={field.name}
+            type={field.type}
+            value={formData[field.name] || ''}
+            onChange={handleChange}
+          />
+        </div>
+      ))}
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+## 197) How do you handle asynchronous code in React?
+- Asynchronous code (e.g., API calls) is handled using async/await inside useEffect or event handlers.
+
+#### 🧠 Example: Fetching Data
+```bash
+function UsersList() {
+  const [users, setUsers] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchUsers = async () => {
+      const res = await fetch("https://jsonplaceholder.typicode.com/users");
+      const data = await res.json();
+      setUsers(data);
+      setLoading(false);
+    };
+    fetchUsers();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+
+  return (
+    <ul>
+      {users.map(user => <li key={user.id}>{user.name}</li>)}
+    </ul>
+  );
+}
+```
+## 198) What is React Transition Group?
+- It’s a library for adding animations/transitions to components as they mount/unmount.
+
+#### 📦 Installation:
+```bash
+npm install react-transition-group
+```
+### 🧠 Example:
+```bash
+import { CSSTransition } from 'react-transition-group';
+import './fade.css';
+
+function FadeComponent({ show }) {
+  return (
+    <CSSTransition
+      in={show}
+      timeout={300}
+      classNames="fade"
+      unmountOnExit
+    >
+      <div className="fade-box">Hello with Transition!</div>
+    </CSSTransition>
+  );
+}
+```
+#### 🔥 CSS (fade.css)
+```bash
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+.fade-exit {
+  opacity: 1;
+}
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+```
+## 199) How do you implement internationalization (i18n) in React?
+- Use libraries like react-i18next for multi-language support.
+
+#### 📦 Installation:
+```bash
+npm install react-i18next i18next
+```
+#### 🧠 Example:
+```bash
+import { useTranslation } from 'react-i18next';
+
+function App() {
+  const { t, i18n } = useTranslation();
+
+  return (
+    <div>
+      <p>{t('welcome')}</p>
+      <button onClick={() => i18n.changeLanguage('fr')}>FR</button>
+      <button onClick={() => i18n.changeLanguage('en')}>EN</button>
+    </div>
+  );
+}
+```
+- 🗂 i18n Translation File (en.json)
+```bash
+{
+  "welcome": "Welcome to our app"
+}
+```
+
+## 200) What are WebSockets, and how are they used in React?
+- WebSockets provide real-time communication between client and server.
+
+#### 📦 Example with socket.io-client
+```bash
+npm install socket.io-client
+```
+#### 🧠 Example:
+```bash
+import { useEffect } from 'react';
+import io from 'socket.io-client';
+
+const socket = io("http://localhost:3001");
+
+function Chat() {
+  useEffect(() => {
+    socket.on("message", msg => {
+      console.log("New message:", msg);
+    });
+
+    return () => socket.disconnect();
+  }, []);
+
+  const sendMessage = () => {
+    socket.emit("message", "Hello from React");
+  };
+
+  return <button onClick={sendMessage}>Send Message</button>;
+}
+```
